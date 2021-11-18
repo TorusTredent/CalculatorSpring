@@ -1,30 +1,32 @@
-package org.example.service;
+package org.example.console;
 
 import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
 
 @Component
-public class ConsoleReaderService {
+public class ConsoleReader {
     private final Scanner scanner;
+    private final ConsoleWriter writer;
 
-    public ConsoleReaderService(Scanner scanner) {
+    public ConsoleReader(Scanner scanner, ConsoleWriter writer) {
         this.scanner = scanner;
+        this.writer = writer;
     }
 
-    public double checkNumber() {
+    public double getNumber() {
         while (!scanner.hasNextDouble()) {
-            System.out.println("Вы ввели значение не того типа");
+            writer.write("Вы ввели значение не того типа");
             scanner.next();
         }
         return scanner.nextDouble();
     }
 
-    public String checkOperation() {
+    public String getOperation() {
         String operation;
         do {
             while (!scanner.hasNext()) {
-                System.out.println("Вы ввели значение не того типа");
+                writer.write("Вы ввели значение не того типа");
                 scanner.next();
             }
             operation = scanner.nextLine();
@@ -32,11 +34,11 @@ public class ConsoleReaderService {
         return operation;
     }
 
-    public int checkExitValue() {
+    public int getExitValue() {
         int value;
         do {
             while (!scanner.hasNextDouble()) {
-                System.out.println("Вы ввели значение не того типа");
+                writer.write("Вы ввели значение не того типа");
                 scanner.next();
             }
             value = scanner.nextInt();
