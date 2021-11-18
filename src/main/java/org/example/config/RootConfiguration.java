@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class RootConfiguration {
 
     @Bean
-    public Scanner getScanner(){
+    public Scanner scanner(){
         return new Scanner(System.in);
     }
 }
