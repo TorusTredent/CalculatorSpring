@@ -84,7 +84,8 @@ public class Application {
     private void mainMenu() {
         writer.write("1) Calculator");
         writer.write("2) History");
-        writer.write("3) Exit");
+        writer.write("3) Delete history");
+        writer.write("4) Exit");
 //        writer.write("1) Profile");
         int chooser = reader.getIntValue();
         personalMenu(chooser);
@@ -103,6 +104,11 @@ public class Application {
                 mainMenu();
             }
             case 3: {
+                appService.deleteOperationHistory(user.getId());
+                writer.write("History has been deleted");
+                mainMenu();
+            }
+            case 4: {
                 writer.write("Exit...");
                 run();
             }

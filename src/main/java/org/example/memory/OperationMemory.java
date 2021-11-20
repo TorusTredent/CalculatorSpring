@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 @Component
 public class OperationMemory {
-    private final LinkedList<Operation> operationList;
+    private LinkedList<Operation> operationList;
 
     public OperationMemory(LinkedList<Operation> operationList) {
         this.operationList = operationList;
@@ -27,5 +27,16 @@ public class OperationMemory {
         }
         return userOperationsList;
     }
+
+    public void deleteOperationHistory(double userId) {
+        LinkedList<Operation> newList = new LinkedList<>();
+        for(Operation list : operationList) {
+            if (list.getUserId() != userId) {
+                newList.add(list);
+            }
+        }
+        operationList = newList;
+    }
+
 
 }

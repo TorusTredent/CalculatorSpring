@@ -47,9 +47,13 @@ public class ApplicationService {
         }
     }
 
-    public void showUserData(double userId) {
-        User user = memory.getUserById(userId);
-        writer.write("Username - " + user.getUsername());
-        writer.write("Password - " + user.getPassword());
+//    public void showUserData(double userId) {
+//        User user = memory.getUserById(userId);
+//        writer.write("Username - " + user.getUsername());
+//        writer.write("Password - " + user.getPassword());
+//    }
+
+    public void deleteOperationHistory(double userId) {
+        operationMemory.deleteOperationHistory(userId);
     }
 }

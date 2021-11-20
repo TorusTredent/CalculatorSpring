@@ -52,12 +52,12 @@ public class UserMemory {
         return null;
     }
 
-    public User getUserById(double userId) {
-        for (User list : userList) {
-            if (list.getId() == userId) {
-                return list;
-            }
-        }
-        return null;
-    }
+//    public User getUserById(double userId) {
+//        for (User list : userList) {
+//            if (list.getId() == userId) {
+//                return list;
+//            }
+//        }
+//        return null;
+//    }
 }
