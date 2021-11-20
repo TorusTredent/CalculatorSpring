@@ -14,9 +14,25 @@ public class ConsoleReader {
         this.writer = writer;
     }
 
+    public int getIntValue() {
+        while (!scanner.hasNextInt()) {
+            writer.write("Incorrect date entered");
+            scanner.next();
+        }
+        return scanner.nextInt();
+    }
+
+    public String getStringValue() {
+        while (!scanner.hasNext()) {
+            writer.write("Incorrect date entered");
+            scanner.next();
+        }
+        return scanner.next();
+    }
+
     public double getNumber() {
         while (!scanner.hasNextDouble()) {
-            writer.write("Вы ввели значение не того типа");
+            writer.write("Incorrect date entered");
             scanner.next();
         }
         return scanner.nextDouble();
@@ -26,7 +42,7 @@ public class ConsoleReader {
         String operation;
         do {
             while (!scanner.hasNext()) {
-                writer.write("Вы ввели значение не того типа");
+                writer.write("Incorrect date entered");
                 scanner.next();
             }
             operation = scanner.nextLine();
@@ -38,7 +54,7 @@ public class ConsoleReader {
         int value;
         do {
             while (!scanner.hasNextDouble()) {
-                writer.write("Вы ввели значение не того типа");
+                writer.write("Incorrect date entered");
                 scanner.next();
             }
             value = scanner.nextInt();
