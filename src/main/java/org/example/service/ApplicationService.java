@@ -2,9 +2,7 @@ package org.example.service;
 
 import org.example.console.ConsoleWriter;
 import org.example.entity.Operation;
-import org.example.entity.User;
 import org.example.memory.OperationMemory;
-import org.example.memory.UserMemory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,12 +10,10 @@ import java.util.ArrayList;
 @Component
 public class ApplicationService {
     private final OperationMemory operationMemory;
-    private final UserMemory memory;
     private final ConsoleWriter writer;
 
-    public ApplicationService(OperationMemory operationMemory, UserMemory memory, ConsoleWriter writer) {
+    public ApplicationService(OperationMemory operationMemory, ConsoleWriter writer) {
         this.operationMemory = operationMemory;
-        this.memory = memory;
         this.writer = writer;
     }
 

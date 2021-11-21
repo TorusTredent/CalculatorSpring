@@ -13,17 +13,18 @@ public class Application {
     private final ConsoleReader reader;
     private final ConsoleWriter writer;
     private final ApplicationService appService;
-    private final AuthorizationService authorization;
+    private final AuthorizationService auth;
     private final OperationMemory operationMemory;
     private final UserService userService;
     private User user;
     private int counter = 0;
 
-    public Application(ConsoleReader reader, ConsoleWriter writer, ApplicationService appService, AuthorizationService authorization, OperationMemory operationMemory, UserService userService, User user) {
+    public Application(ConsoleReader reader, ConsoleWriter writer, ApplicationService appService,
+                       AuthorizationService auth, OperationMemory operationMemory, UserService userService, User user) {
         this.reader = reader;
         this.writer = writer;
         this.appService = appService;
-        this.authorization = authorization;
+        this.auth = auth;
         this.operationMemory = operationMemory;
         this.userService = userService;
         this.user = user;
@@ -33,23 +34,23 @@ public class Application {
         writer.write("1) Sing in");
         writer.write("2) Registration");
         int chooser = reader.getIntValue();
-        authMenu(chooser);
+        authorization(chooser);
     }
 
 
-    private void authMenu(int chooser) {
+    private void authorization(int chooser) {
         switch(chooser) {
             case 1: {
-                if (authorization.isUserListEmpty()) {
+                if (auth.isUserListEmpty()) {
                     writer.write("User list is empty");
                 } else {
                     writer.write("Input username: ");
                     String username = reader.getStringValue();
-                    if (authorization.isExistUsername(username)) {
+                    if (auth.isExistUsername(username)) {
                         writer.write("Input password: ");
                         String password = reader.getStringValue();
-                        if (authorization.isSuitPassword(username, password)) {
-                            user = authorization.getUser(username, password);
+                        if (auth.isSuitPassword(username, password)) {
+                            user = auth.getUser(username, password);
                             mainMenu();
                         }
                     }
@@ -60,15 +61,12 @@ public class Application {
             case 2: {
                 writer.write("Input username: ");
                 String username = reader.getStringValue();
-                if (!authorization.isExistUsername(username)) {
+                if (!auth.isExistUsername(username)) {
                     writer.write("Input password: ");
                     String password = reader.getStringValue();
-
-                    User newUser = new User(counter, username, password);
-                    counter++;
-
-                    authorization.registrationUser(newUser);
+                    auth.registrationUser(new User(counter, username, password));
                     writer.write("User create");
+                    counter++;
                     run();
                 }
                 writer.write("Incorrect date entered");
@@ -164,10 +162,10 @@ public class Application {
         int exit;
         do {
             writer.write("Input 1 number: ");
-            double num1 = reader.getNumber();
+            double num1 = reader.getDoubleValue();
 
             writer.write("Input 2 number: ");
-            double num2 = reader.getNumber();
+            double num2 = reader.getDoubleValue();
 
             writer.write("Choose 1 from operations: '+', '-', '*', '/';");
             String operation = reader.getOperation();

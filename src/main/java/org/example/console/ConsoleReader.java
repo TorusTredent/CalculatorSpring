@@ -30,7 +30,7 @@ public class ConsoleReader {
         return scanner.next();
     }
 
-    public double getNumber() {
+    public double getDoubleValue() {
         while (!scanner.hasNextDouble()) {
             writer.write("Incorrect date entered");
             scanner.next();
