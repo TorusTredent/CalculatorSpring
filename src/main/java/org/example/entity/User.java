@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")
-@Lazy
 public class User {
     private double id;
     private String username;
