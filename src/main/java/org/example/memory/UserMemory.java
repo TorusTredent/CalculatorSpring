@@ -52,12 +52,28 @@ public class UserMemory {
         return null;
     }
 
-//    public User getUserById(double userId) {
-//        for (User list : userList) {
-//            if (list.getId() == userId) {
-//                return list;
-//            }
-//        }
-//        return null;
-//    }
+    public User getUserById(double userId) {
+        for (User list : userList) {
+            if (list.getId() == userId) {
+                return list;
+            }
+        }
+        return null;
+    }
+
+    public void changePassword(double userId, String newPassword) {
+        for (User list : userList) {
+            if (list.getId() == userId) {
+                list.setPassword(newPassword);
+            }
+        }
+    }
+
+    public void changeUsername(double userId, String newUsername) {
+        for (User list : userList) {
+            if (list.getId() == userId) {
+                list.setUsername(newUsername);
+            }
+        }
+    }
 }

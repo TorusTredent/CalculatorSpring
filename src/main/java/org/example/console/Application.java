@@ -5,6 +5,7 @@ import org.example.entity.User;
 import org.example.memory.OperationMemory;
 import org.example.service.ApplicationService;
 import org.example.service.AuthorizationService;
+import org.example.service.UserService;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,15 +15,17 @@ public class Application {
     private final ApplicationService appService;
     private final AuthorizationService authorization;
     private final OperationMemory operationMemory;
+    private final UserService userService;
     private User user;
     private int counter = 0;
 
-    public Application(ConsoleReader reader, ConsoleWriter writer, ApplicationService appService, AuthorizationService authorization, OperationMemory operationMemory, User user) {
+    public Application(ConsoleReader reader, ConsoleWriter writer, ApplicationService appService, AuthorizationService authorization, OperationMemory operationMemory, UserService userService, User user) {
         this.reader = reader;
         this.writer = writer;
         this.appService = appService;
         this.authorization = authorization;
         this.operationMemory = operationMemory;
+        this.userService = userService;
         this.user = user;
     }
 
@@ -39,7 +42,6 @@ public class Application {
             case 1: {
                 if (authorization.isUserListEmpty()) {
                     writer.write("User list is empty");
-                    run();
                 } else {
                     writer.write("Input username: ");
                     String username = reader.getStringValue();
@@ -52,8 +54,8 @@ public class Application {
                         }
                     }
                     writer.write("Incorrect username or password entered");
-                    run();
                 }
+                run();
             }
             case 2: {
                 writer.write("Input username: ");
@@ -62,12 +64,10 @@ public class Application {
                     writer.write("Input password: ");
                     String password = reader.getStringValue();
 
-                    user.setId(counter);
+                    User newUser = new User(counter, username, password);
                     counter++;
-                    user.setUsername(username);
-                    user.setPassword(password);
 
-                    authorization.registrationUser(user);
+                    authorization.registrationUser(newUser);
                     writer.write("User create");
                     run();
                 }
@@ -82,33 +82,33 @@ public class Application {
     }
 
     private void mainMenu() {
-        writer.write("1) Calculator");
-        writer.write("2) History");
-        writer.write("3) Delete history");
-        writer.write("4) Exit");
-//        writer.write("1) Profile");
+        writer.write("1) Profile");
+        writer.write("2) Calculator");
+        writer.write("3) History");
+        writer.write("4) Delete history");
+        writer.write("5) Exit");
         int chooser = reader.getIntValue();
         personalMenu(chooser);
     }
 
     private void personalMenu(int chooser) {
         switch(chooser) {
-//            case 1: {
-//                profileMenu();
-//            }
             case 1: {
-                calculator();
+                profileMenu();
             }
             case 2: {
+                calculator();
+            }
+            case 3: {
                 appService.showOperationHistory(user.getId());
                 mainMenu();
             }
-            case 3: {
+            case 4: {
                 appService.deleteOperationHistory(user.getId());
                 writer.write("History has been deleted");
                 mainMenu();
             }
-            case 4: {
+            case 5: {
                 writer.write("Exit...");
                 run();
             }
@@ -119,38 +119,46 @@ public class Application {
         }
     }
 
-//    private void profileMenu() {
-//        writer.write("1) Show username and password");
-//        writer.write("2) Change username");
-//        writer.write("3) Change password");
-//        writer.write("4) Back");
-//        int chooser = reader.getIntValue();
-//        selectedItemProfileMenu(chooser);
-//    }
-//
-//    private void selectedItemProfileMenu(int chooser) {
-//        switch (chooser) {
-//            case 1: {
-//                appService.showUserData(user.getId());
-//                profileMenu();
-//            }
-//            case 2: {
-//                writer.write("Input new password: ");
-//                String newPassword = reader.getStringValue();
-//                appService.
-////                changePassword
-//            }
-//            case 3: {
-////                changeName
-//            }
-//            case 4: {
-////                back
-//            }
-//            default: {
-//
-//            }
-//        }
-//    }
+
+    private void profileMenu() {
+        writer.write("1) Show username and password");
+        writer.write("2) Change username");
+        writer.write("3) Change password");
+        writer.write("4) Back");
+        int chooser = reader.getIntValue();
+        selectedItemProfileMenu(chooser);
+    }
+
+    private void selectedItemProfileMenu(int chooser) {
+        switch (chooser) {
+            case 1: {
+                userService.showUserData(user.getId());
+                profileMenu();
+            }
+            case 2: {
+                writer.write("Input new username: ");
+                String newUsername = reader.getStringValue();
+                userService.changeUsername(user.getId(), newUsername);
+                writer.write("Changes complete");
+                profileMenu();
+            }
+            case 3: {
+                writer.write("Input new password: ");
+                String newPassword = reader.getStringValue();
+                userService.changePassword(user.getId(), newPassword);
+                writer.write("Changes complete");
+                profileMenu();
+            }
+            case 4: {
+                mainMenu();
+            }
+            default: {
+                writer.write("Incorrect number entered");
+                profileMenu();
+            }
+        }
+    }
+
 
     private void calculator() {
         int exit;
