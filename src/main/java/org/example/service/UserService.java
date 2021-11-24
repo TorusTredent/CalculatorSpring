@@ -15,6 +15,26 @@ public class UserService {
         this.writer = writer;
     }
 
+    public boolean isExistUsername(String username) {
+        return memory.isExistUsername(username);
+    }
+
+    public boolean isSuitPassword(String username, String password) {
+        return memory.isSuitPassword(username, password);
+    }
+
+    public void registrationUser(String username, String password) {
+        memory.addUser(new User(username, password));
+    }
+
+    public User getUser(String username, String password) {
+        return memory.getUserByNameAndPassword(username, password);
+    }
+
+    public boolean isUserListEmpty() {
+        return memory.isUserListEmpty();
+    }
+
     public void showUserData(double userId) {
         User user = memory.getUserById(userId);
         writer.write("Username - " + user.getUsername());

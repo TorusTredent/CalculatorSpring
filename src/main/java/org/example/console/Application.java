@@ -1,10 +1,7 @@
 package org.example.console;
 
-import org.example.entity.Operation;
 import org.example.entity.User;
-import org.example.memory.OperationMemory;
 import org.example.service.ApplicationService;
-import org.example.service.AuthorizationService;
 import org.example.service.UserService;
 import org.springframework.stereotype.Component;
 
@@ -13,19 +10,14 @@ public class Application {
     private final ConsoleReader reader;
     private final ConsoleWriter writer;
     private final ApplicationService appService;
-    private final AuthorizationService auth;
-    private final OperationMemory operationMemory;
     private final UserService userService;
     private User user;
-    private int counter = 0;
 
     public Application(ConsoleReader reader, ConsoleWriter writer, ApplicationService appService,
-                       AuthorizationService auth, OperationMemory operationMemory, UserService userService, User user) {
+                       UserService userService, User user) {
         this.reader = reader;
         this.writer = writer;
         this.appService = appService;
-        this.auth = auth;
-        this.operationMemory = operationMemory;
         this.userService = userService;
         this.user = user;
     }
@@ -33,24 +25,28 @@ public class Application {
     public void run() {
         writer.write("1) Sing in");
         writer.write("2) Registration");
-        int chooser = reader.getIntValue();
-        authorization(chooser);
+        writer.write("3) Exit");
+        int i = reader.getIntValue();
+        if (i == 3) {
+            return;
+        }
+        authorization(i);
     }
 
 
-    private void authorization(int chooser) {
-        switch(chooser) {
+    private void authorization(int i) {
+        switch(i) {
             case 1: {
-                if (auth.isUserListEmpty()) {
+                if (userService.isUserListEmpty()) {
                     writer.write("User list is empty");
                 } else {
                     writer.write("Input username: ");
                     String username = reader.getStringValue();
-                    if (auth.isExistUsername(username)) {
+                    if (userService.isExistUsername(username)) {
                         writer.write("Input password: ");
                         String password = reader.getStringValue();
-                        if (auth.isSuitPassword(username, password)) {
-                            user = auth.getUser(username, password);
+                        if (userService.isSuitPassword(username, password)) {
+                            user = userService.getUser(username, password);
                             mainMenu();
                         }
                     }
@@ -61,12 +57,11 @@ public class Application {
             case 2: {
                 writer.write("Input username: ");
                 String username = reader.getStringValue();
-                if (!auth.isExistUsername(username)) {
+                if (!userService.isExistUsername(username)) {
                     writer.write("Input password: ");
                     String password = reader.getStringValue();
-                    auth.registrationUser(new User(counter, username, password));
+                    userService.registrationUser(username, password);
                     writer.write("User create");
-                    counter++;
                     run();
                 }
                 writer.write("Incorrect date entered");
@@ -84,13 +79,13 @@ public class Application {
         writer.write("2) Calculator");
         writer.write("3) History");
         writer.write("4) Delete history");
-        writer.write("5) Exit");
-        int chooser = reader.getIntValue();
-        personalMenu(chooser);
+        writer.write("5) Logout");
+        int i = reader.getIntValue();
+        personalMenu(i);
     }
 
-    private void personalMenu(int chooser) {
-        switch(chooser) {
+    private void personalMenu(int i) {
+        switch(i) {
             case 1: {
                 profileMenu();
             }
@@ -170,12 +165,7 @@ public class Application {
             writer.write("Choose 1 from operations: '+', '-', '*', '/';");
             String operation = reader.getOperation();
 
-            double calcResult = appService.calculate(num1, num2, operation);
-
-            Operation operationResult = new Operation(String.valueOf(num1), String.valueOf(num2), operation,
-                    String.valueOf(calcResult), user.getId());
-
-            operationMemory.addOperation(operationResult);
+            double calcResult = appService.calculate(num1, num2, operation, user.getId());
 
             writer.write(num1 + " " + operation + " " + num2 + " = " + calcResult);
             writer.write("Input 1 - if u want to continue, 0 - if u want to exit");

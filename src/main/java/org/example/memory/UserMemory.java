@@ -8,6 +8,7 @@ import java.util.ArrayList;
 @Component
 public class UserMemory {
     private final ArrayList<User> userList;
+    private long id = 1;
 
     public UserMemory(ArrayList<User> userList) {
         this.userList = userList;
@@ -38,6 +39,7 @@ public class UserMemory {
     }
 
     public void addUser(User user) {
+        user.setId(id++);
         userList.add(user);
     }
 

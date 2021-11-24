@@ -17,22 +17,29 @@ public class ApplicationService {
         this.writer = writer;
     }
 
-    public double calculate(double num1, double num2, String operation) {
+    public double calculate(double num1, double num2, String operation, long userId) {
+        double result = 0;
         switch (operation) {
             case "+" : {
-                return CalculateService.sum(num1, num2);
+                result = CalculateService.sum(num1, num2);
+                break;
             }
             case "-" : {
-                return CalculateService.sub(num1, num2);
+                result = CalculateService.sub(num1, num2);
+                break;
             }
             case "*" : {
-                return CalculateService.div(num1, num2);
+                result = CalculateService.div(num1, num2);
+                break;
             }
             case "/" : {
-                return CalculateService.multiply(num1, num2);
+                result = CalculateService.multiply(num1, num2);
+                break;
             }
         }
-        return 0;
+        operationMemory.addOperation(new Operation(String.valueOf(num1), String.valueOf(num2), operation,
+                String.valueOf(result), userId));
+        return result;
     }
 
     public void showOperationHistory(double userId) {

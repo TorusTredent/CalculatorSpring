@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class User {
-    private double id;
+    private long id;
     private String username;
     private String password;
 
@@ -13,17 +13,16 @@ public class User {
     public User() {
     }
 
-    public User(double id, String username, String password) {
-        this.id = id;
+    public User(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public double getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(double id) {
+    public void setId(long id) {
         this.id = id;
     }
 

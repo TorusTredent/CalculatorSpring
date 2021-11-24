@@ -1,4 +1,4 @@
-package org.example;
+package org.example.console;
 
 import org.example.config.RootConfiguration;
 import org.example.console.Application;
