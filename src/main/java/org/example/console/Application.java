@@ -23,19 +23,22 @@ public class Application {
     }
 
     public void run() {
-        writer.write("1) Sing in");
-        writer.write("2) Registration");
-        writer.write("3) Exit");
-        int i = reader.getIntValue();
-        if (i == 3) {
-            return;
+        while (true) {
+            writer.write("1) Sing in");
+            writer.write("2) Registration");
+            writer.write("3) Exit");
+            int i = reader.getIntValue();
+            if (i == 3) {
+                writer.write("Exit...");
+                return;
+            }
+            authorization(i);
         }
-        authorization(i);
     }
 
 
     private void authorization(int i) {
-        switch(i) {
+        switch (i) {
             case 1: {
                 if (userService.isUserListEmpty()) {
                     writer.write("User list is empty");
@@ -48,11 +51,14 @@ public class Application {
                         if (userService.isSuitPassword(username, password)) {
                             user = userService.getUser(username, password);
                             mainMenu();
+                        } else {
+                            writer.write("Incorrect password entered");
                         }
+                    } else {
+                        writer.write("Incorrect username entered");
                     }
-                    writer.write("Incorrect username or password entered");
                 }
-                run();
+                return;
             }
             case 2: {
                 writer.write("Input username: ");
@@ -62,92 +68,94 @@ public class Application {
                     String password = reader.getStringValue();
                     userService.registrationUser(username, password);
                     writer.write("User create");
-                    run();
+                    return;
                 }
                 writer.write("Incorrect date entered");
-                run();
+                return;
             }
             default: {
                 writer.write("Incorrect number entered");
-                run();
             }
         }
     }
 
     private void mainMenu() {
-        writer.write("1) Profile");
-        writer.write("2) Calculator");
-        writer.write("3) History");
-        writer.write("4) Delete history");
-        writer.write("5) Logout");
-        int i = reader.getIntValue();
-        personalMenu(i);
+        while (true) {
+            writer.write("1) Profile");
+            writer.write("2) Calculator");
+            writer.write("3) History");
+            writer.write("4) Delete history");
+            writer.write("5) Logout");
+            int i = reader.getIntValue();
+            if (i == 5) {
+                return;
+            }
+            personalMenu(i);
+        }
     }
 
     private void personalMenu(int i) {
-        switch(i) {
+        switch (i) {
             case 1: {
                 profileMenu();
+                return;
             }
             case 2: {
                 calculator();
+                return;
             }
             case 3: {
                 appService.showOperationHistory(user.getId());
-                mainMenu();
+                return;
             }
             case 4: {
                 appService.deleteOperationHistory(user.getId());
                 writer.write("History has been deleted");
-                mainMenu();
-            }
-            case 5: {
-                writer.write("Exit...");
-                run();
+                return;
             }
             default: {
                 writer.write("Incorrect number entered");
-                mainMenu();
             }
         }
     }
 
 
     private void profileMenu() {
-        writer.write("1) Show username and password");
-        writer.write("2) Change username");
-        writer.write("3) Change password");
-        writer.write("4) Back");
-        int chooser = reader.getIntValue();
-        selectedItemProfileMenu(chooser);
+        while (true) {
+            writer.write("1) Show username and password");
+            writer.write("2) Change username");
+            writer.write("3) Change password");
+            writer.write("4) Back");
+            int i = reader.getIntValue();
+            if (i == 4) {
+                return;
+            }
+            selectedItemProfileMenu(i);
+        }
     }
 
-    private void selectedItemProfileMenu(int chooser) {
-        switch (chooser) {
+    private void selectedItemProfileMenu(int i) {
+        switch (i) {
             case 1: {
                 userService.showUserData(user.getId());
-                profileMenu();
+                return;
             }
             case 2: {
                 writer.write("Input new username: ");
                 String newUsername = reader.getStringValue();
                 userService.changeUsername(user.getId(), newUsername);
                 writer.write("Changes complete");
-                profileMenu();
+                return;
             }
             case 3: {
                 writer.write("Input new password: ");
                 String newPassword = reader.getStringValue();
                 userService.changePassword(user.getId(), newPassword);
                 writer.write("Changes complete");
-                profileMenu();
-            }
-            case 4: {
-                mainMenu();
+                return;
             }
             default: {
                 writer.write("Incorrect number entered");
-                profileMenu();
             }
         }
     }
@@ -171,7 +179,6 @@ public class Application {
             writer.write("Input 1 - if u want to continue, 0 - if u want to exit");
 
             exit = reader.getExitValue();
-        } while(exit == 1);
-        mainMenu();
+        } while (exit == 1);
     }
 }
